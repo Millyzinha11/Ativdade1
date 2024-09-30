@@ -1,0 +1,64 @@
+-- Banco de dados para FlaskBlog --
+-- Versão MySQL / MariaDB --
+
+-- Apaga o banco de dados se ele existir
+DROP DATABASE IF EXISTS flaskblogdb;
+
+-- (Re)cria o banco de dados
+CREATE DATABASE flaskblogdb
+    CHARACTER SET utf8mb4
+    COLLATE utf8mb4_general_ci;
+
+-- Seleciona o banco de dados para os próximos comandos
+USE flaskblogdb;
+
+-- Cria a tabela 'staff'
+CREATE TABLE staff (
+    sta_id INT PRIMARY KEY AUTO_INCREMENT,
+    sta_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    sta_name VARCHAR(127) NOT NULL,
+    sta_email VARCHAR(255) NOT NULL,
+    sta_password VARCHAR(63) NOT NULL,
+    sta_image VARCHAR(255),
+    sta_birth DATE NOT NULL,
+    sta_description VARCHAR(255),
+    sta_type ENUM('admin', 'author', 'moderator') DEFAULT 'moderator',
+    sta_status ENUM('on', 'off', 'del') DEFAULT 'on'
+);
+
+-- Cria a tabela 'article'
+CREATE TABLE article (
+    art_id INT PRIMARY KEY AUTO_INCREMENT,
+    art_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    art_author INT NOT NULL,
+    art_title VARCHAR(127) NOT NULL,
+    art_resume VARCHAR(255) NOT NULL,
+    art_thumbnail VARCHAR(255) NOT NULL,
+    art_content TEXT NOT NULL,
+    art_views INT NOT NULL DEFAULT 0,
+    art_status ENUM('on', 'off', 'del') DEFAULT 'on',
+    FOREIGN KEY (art_author) REFERENCES staff (sta_id)
+);
+
+-- Cria a tabela 'comment'
+CREATE TABLE `comment` (
+    com_id INT PRIMARY KEY AUTO_INCREMENT,
+    com_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    com_article INT NOT NULL,
+    com_author_name VARCHAR(127) NOT NULL,
+    com_author_email VARCHAR(255) NOT NULL,
+    com_comment TEXT,
+    com_status ENUM('on', 'off', 'del') DEFAULT 'on',
+    FOREIGN KEY (com_article) REFERENCES article (art_id)
+);
+
+-- Cria a tabela 'contact'
+CREATE TABLE contact (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    name VARCHAR(127) NOT NULL, 
+    email VARCHAR(255) NOT NULL, 
+    subject VARCHAR(255) NOT NULL,
+    message TEXT,
+    status ENUM('on', 'off', 'del') DEFAULT 'on'
+);

@@ -1,0 +1,10 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <h2>Atividade</h2>
+    <form action="/atividade" method="post">
+        <label for="resposta">Sua resposta:</label>
+        <textarea id="resposta" name="resposta" required></textarea>
+        <button type="submit">Enviar</button>
+    </form>
+{% endblock %}
